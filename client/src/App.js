@@ -49,16 +49,13 @@ const App = () => {
 
               console.log("Exported XFDF Data:", xfdfData);
 
-              // Send XFDF data to API endpoint
-              let xfdfData1 = `<?xml version="1.0" encoding="UTF-8" ?><xfdf xmlns="http://ns.adobe.com/xfdf/" xml:space="preserve"><fields /><annots><square page="0" rect="100,592,300,642" color="#000000" flags="print" name="7dfe1cf3-1d78-fe6b-8fb1-f8d90afc0717" title="Rahman" subject="Rectangle" date="D:20241113103703-05'00'" creationdate="D:20241113103703-05'00'"/><square page="0" rect="322.53,586.47,548.09,708.73" color="#000000" flags="print" name="b8534ffc-d92c-02b4-2143-4ff1c86d9ee7" title="Rahman" subject="Rectangle" date="D:20241113103802-05'00'" creationdate="D:20241113103802-05'00'" dashes=""/><square page="0" rect="452.17,367.23,609.22,519.01" color="#000000" flags="print" name="8a5e0370-0303-2969-2b81-1e42b9dfd446" title="Rahman" subject="Rectangle" date="D:20241113103803-05'00'" creationdate="D:20241113103803-05'00'" dashes=""/><circle page="0" rect="130.7,687.65,224.51,747.73" color="#E44234" flags="print" name="f3437513-08a1-4e2f-bbf6-42814fac6b00" title="Rahman" subject="Ellipse" date="D:20241113103934-05'00'" creationdate="D:20241113103934-05'00'"/><circle page="0" rect="263.5,686.6,315.15,754.06" color="#E44234" flags="print" name="58ba341b-6d40-a2d3-67f6-4b1477c54999" title="Rahman" subject="Ellipse" date="D:20241113103935-05'00'" creationdate="D:20241113103935-05'00'"/></annots><pages><defmtx matrix="1,0,0,-1,0,792" /></pages></xfdf>`;
-
               const result = await axios
                 .post(
                   "http://localhost:5000/api/AttchmentsDraws/SaveDraws",
                   xfdfData,
                   {
                     headers: {
-                      "Content-Type": "application/xml", // Set the appropriate content type
+                      "Content-Type": "application/xml",
                     },
                   }
                 )
@@ -73,13 +70,10 @@ const App = () => {
                 });
 
               alert("Annotations saved successfully!");
-              console.log(result);
             } catch (error) {
               console.error("Error saving annotations:", error);
               alert("Failed to save annotations. Please try again.");
             }
-
-            // API call for saving xfdf;
           },
         });
       });
@@ -139,26 +133,5 @@ const App = () => {
     </div>
   );
 };
-
-function encodeToBase64(str) {
-  const utf8Array = new TextEncoder().encode(str);
-  let binaryString = "";
-  utf8Array.forEach((byte) => {
-    binaryString += String.fromCharCode(byte);
-  });
-  return btoa(binaryString);
-}
-
-function decodeFromBase64(base64Str) {
-  // Convert URL-safe Base64 to standard Base64
-  const safeBase64Str = base64Str.replace(/-/g, "+").replace(/_/g, "/");
-
-  // Decode Base64 to binary string
-  const binaryString = atob(safeBase64Str);
-
-  // Convert binary string to Uint8Array and decode to UTF-8
-  const utf8Array = Uint8Array.from(binaryString, (char) => char.charCodeAt(0));
-  return new TextDecoder("utf-8").decode(utf8Array);
-}
 
 export default App;
