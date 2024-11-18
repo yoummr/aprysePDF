@@ -44,25 +44,20 @@ namespace API.Controllers
         }
 
         [HttpPost("SaveDraws")]
-        public async Task<ActionResult<string>> SaveDraws()
+        public async Task<ActionResult<string>> SaveDraws([FromQuery] int id)
         {
             try
             {
-                // Read the request body asynchronously
                 string xfdfData;
                 using (var reader = new StreamReader(Request.Body))
                 {
                     xfdfData = await reader.ReadToEndAsync();
                 }
 
-                // Log the received data
-                Console.WriteLine($"Received Data: {xfdfData}");
-
-                // Process the database update
-                var attached = context.AttachmentDraws.FirstOrDefault(x => x.Id == 1);
+                var attached = context.AttachmentDraws.FirstOrDefault(x => x.Id == id);
                 if (attached != null)
                 {
-                    attached.AnnotationHistory = xfdfData; // Save the received XFDF data
+                    attached.AnnotationHistory = xfdfData;
                     context.SaveChanges();
                 }
                 else
@@ -74,7 +69,6 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                // Handle exceptions
                 return StatusCode(500, $"Error: {ex.Message}");
             }
         }
